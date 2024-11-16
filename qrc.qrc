@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>qrc/allow.png</file>
+        <file>qrc/bowl-fill.ico</file>
+        <file>qrc/confused-3.png</file>
+        <file>qrc/creepy.png</file>
+        <file>qrc/crying-3.png</file>
+        <file>qrc/edit.png</file>
+        <file>qrc/enter.png</file>
+        <file>qrc/happy-11.png</file>
+        <file>qrc/in-love-2.png</file>
+        <file>qrc/look.png</file>
+        <file>qrc/look1.png</file>
+        <file>qrc/sad.png</file>
+    </qresource>
+</RCC>
