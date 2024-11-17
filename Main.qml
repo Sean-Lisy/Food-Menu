@@ -4,7 +4,7 @@ import QtQuick.Controls 2.9
 
 pragma ComponentBehavior: Bound
 
-Window {
+                          Window {
     visible: true
     title: "Food Menu"
     color: "#fafafa"
@@ -14,8 +14,8 @@ Window {
     property real buttonWidth: Screen.pixelDensity > 1? 100 : 80
     property real buttonHeight: Screen.pixelDensity > 1? 45 : 40
     property real controlSpacing: Screen.pixelDensity > 1? 25 : 20
-    width: 1240 / 2
-    height: 2770 / 2
+    width: 1240
+    height: 2770
 
     // 背景渐变
     Rectangle {
@@ -196,14 +196,90 @@ Window {
                     id: textArea
                     visible: true
                     font.pixelSize : 15
-                    color : "yellow"
+                    // color : "yellow"
                     wrapMode: TextArea.Wrap
                     background : Rectangle {
                         color : "#e6e6e6"
                         Image {
-                            source: "qrc:/new/prefix1/qrc/background.png"
+                            width : parent.width
+                            height : parent.height
+                            // source: "qrc:/new/prefix1/qrc/background.png"
                         }
                     }
+                }
+            }
+        }
+
+        // Button Show Menu Score And Date
+        Button {
+            id : btnShow
+            x : enter_menu.x
+            y : row_slider.y + row_slider.y / 3 * 4 + parent.height / 2
+            width : enter_menu.width * 0.45
+            height : enter_menu.height
+            background : Rectangle {
+                visible : true
+                id : btnBackground
+                implicitHeight:btnShow.height
+                implicitWidth:btnShow.width
+                anchors.fill : parent;
+                opacity: enabled ? 1 : 0.3
+                color : "#e6e6e6"
+                radius : btnShow.height / 2
+                Text {
+                    // verticalAlignment: Text.AlignVCenter
+                    // leftPadding : btnShow.height * 2
+                    font.pixelSize : 16
+                    anchors.centerIn: parent
+                    text : qsTr(" 评分清单")
+                }
+                Image {
+                    x : btnShow.height / 10
+                    y : btnShow.height / 20
+                    width : btnShow.height * 0.7
+                    height : width
+                    source: "qrc:/new/prefix1/qrc/look1.png"
+                }
+            }
+            onPressed : {
+                var strData;
+                strData = foodMenu.getHistoryMenu();
+                console.log(strData);
+                textArea.text = strData;
+            }
+        }
+
+        Button {
+            id: btnAnalyze
+            font.pointSize: 16 // 设置字体大小
+            visible : true
+            x : enter_menu.x + enter_menu.width - width
+            y : btnShow.y
+            width : btnShow.width
+            height : btnShow.height
+
+            // visible : true
+            background : Rectangle {
+                visible : true
+                implicitHeight:btnShow.height
+                implicitWidth:btnShow.width
+                anchors.fill : parent;
+                opacity: enabled ? 1 : 0.3
+                color : "#e6e6e6"
+                radius : btnShow.height / 2
+                Text {
+                    // verticalAlignment: Text.AlignVCenter
+                    // leftPadding : btnShow.height * 2
+                    font.pixelSize : 16
+                    anchors.centerIn: parent
+                    text : qsTr(" 菜单分析")
+                }
+                Image {
+                    x : btnShow.height / 10
+                    y : btnShow.height / 12
+                    width : btnShow.height
+                    height : width
+                    source: "qrc:/new/prefix1/qrc/look.png"
                 }
             }
         }

@@ -5,11 +5,16 @@
 QFoodMeun::QFoodMeun(QObject *parent)
     : QObject{parent}
 {
-    m_file.setFileName(QString("menu1.txt"));
+    m_file.setFileName(QString("menu.txt"));
+    qDebug() << "???";
     if (!m_file.exists()) {
+        qDebug() << "!exist";
         if (m_file.open(QFile::WriteOnly)) {
             m_file.close();
         }
+    }
+    else {
+        getMenuRate();
     }
 }
 
@@ -20,24 +25,46 @@ QFoodMeun::~QFoodMeun()
 
 void QFoodMeun::fillMenuMap(const QString &strMenu, const int &nScore)
 {
+    QDateTime date = QDateTime::currentDateTime();
+    TFoodMenu foodMenu;
+
     if (!strMenu.isEmpty() && !strMenu.contains("...") && (nScore >= 1) && (nScore <= 5))
     {
-        m_mapMenuRate.insert(strMenu, nScore);
+        foodMenu.strDay = date.toString("yyyy-MM-dd");
+        foodMenu.nScore = nScore;
+        m_mapMenuRate.insert(strMenu, foodMenu);
     }
     saveMenuRate();
+}
+
+QString QFoodMeun::getHistoryMenu()
+{
+    QTextStream in(&m_file);
+    QString strData;
+
+    if (!m_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "无法打开文件进行写入";
+        return "";
+    }
+    while (!in.atEnd()) {
+        strData += in.readLine();
+        strData += "\n"; // 如果希望保留换行符，这里添加换行符，若不需要可省略
+    }
+    m_file.close();
+    return strData;
 }
 
 void QFoodMeun::saveMenuRate()
 {
     QTextStream out(&m_file);
-    QMultiMap<QString, int>::const_iterator iter;
+    QMultiMap<QString, TFoodMenu>::const_iterator iter;
 
     if (!m_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "无法打开文件进行写入";
         return;
     }
     for (iter = m_mapMenuRate.constBegin(); iter!= m_mapMenuRate.constEnd(); ++iter) {
-        out << iter.key() << ": " << iter.value() << Qt::endl;
+        out <<  iter.key() << ": " << iter.value().strDay << ": " << iter.value().nScore << Qt::endl;
     }
     m_file.close();
 }
@@ -54,10 +81,12 @@ void QFoodMeun::getMenuRate()
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList parts = line.split(":");
-        if (parts.size() == 2) {
+        if (parts.size() == 3) {
+            TFoodMenu foodMenu;
             QString key = parts[0].trimmed();
-            int value = parts[1].trimmed().toInt();
-            m_mapMenuRate.insert(key, value);
+            foodMenu.strDay = parts[1].trimmed();
+            foodMenu.nScore =  parts[2].trimmed().toInt();
+            m_mapMenuRate.insert(key, foodMenu);
         }
     }
     m_file.close();
