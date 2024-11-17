@@ -1,9 +1,6 @@
 import QtQml 2.9
 import QtQuick 2.9
 import QtQuick.Controls 2.9
-import QtQuick.Controls.Material 2.12
-// import QtQuick.Window 2.9
-// import QFoodMeun 1.0
 
 pragma ComponentBehavior: Bound
 
@@ -48,7 +45,7 @@ Window {
             width : parent.width / 1.5
             height : parent.height / 15
             leftPadding: enter_image.width * 2
-            font.pixelSize : 15
+            font.pixelSize : 16
             placeholderText: qsTr("      请输入你的菜单...")
             placeholderTextColor: "#999999"//提示词背景颜色
             background: Rectangle {
@@ -117,26 +114,6 @@ Window {
             width: enter_menu.width
             height : enter_menu.height
 
-            Connections {
-                target: slider
-                function onMoved() { // todo
-                    var nValue = slider.value;
-                    if (nValue == 1) {
-                        image_slide.source = "qrc:/new/prefix1/qrc/sad.png";
-                    } else if (nValue == 2) {
-                        image_slide.source = "qrc:/new/prefix1/qrc/creepy.png";
-                    } else if (nValue == 3) {
-                        image_slide.source = "qrc:/new/prefix1/qrc/confused-3.png";
-                    } else if (nValue == 4) {
-                        image_slide.source = "qrc:/new/prefix1/qrc/happy-11.png";
-                    } else if (nValue == 5) {
-                        image_slide.source = "qrc:/new/prefix1/qrc/in-love-2.png";
-                    }
-                    // console.log("ADAD");
-                    // foodMenu.fillMenuMap(enter_menu.text, nValue);
-                }
-            }
-
             Slider {
                 id: slider
                 value: 1
@@ -149,6 +126,31 @@ Window {
                 width: parent.width
                 orientation : Qt.Horizontal
                 snapMode : Slider.SnapOnRelease
+                live : false
+
+                onPressedChanged: {
+                    if( pressed ) {
+                        console.log("pressed")
+                    }else {
+                        console.log("released")
+                        var nValue = slider.value;
+                        if (slider.pressed) {
+                            return;
+                        }
+                        if (nValue == 1) {
+                            image_slide.source = "qrc:/new/prefix1/qrc/sad.png";
+                        } else if (nValue == 2) {
+                            image_slide.source = "qrc:/new/prefix1/qrc/creepy.png";
+                        } else if (nValue == 3) {
+                            image_slide.source = "qrc:/new/prefix1/qrc/confused-3.png";
+                        } else if (nValue == 4) {
+                            image_slide.source = "qrc:/new/prefix1/qrc/happy-11.png";
+                        } else if (nValue == 5) {
+                            image_slide.source = "qrc:/new/prefix1/qrc/in-love-2.png";
+                        }
+                        foodMenu.fillMenuMap(enter_menu.text, nValue);
+                    }
+                }
 
                 background: Rectangle {
                     radius: height / 2.5
@@ -175,6 +177,32 @@ Window {
                         width: height
                         height: parent.height
                         source:  "qrc:/new/prefix1/qrc/happy-11.png"
+                    }
+                }
+            }
+        }
+
+        // TextArea + ScrollView
+        Rectangle {
+            x : enter_menu.x
+            y : row_slider.y + row_slider.y / 3 * 3
+            width : enter_menu.width
+            height : parent.height / 2
+            // visible: true
+            ScrollView {
+                id : scrollViem
+                anchors.fill : parent;
+                TextArea {
+                    id: textArea
+                    visible: true
+                    font.pixelSize : 15
+                    color : "yellow"
+                    wrapMode: TextArea.Wrap
+                    background : Rectangle {
+                        color : "#e6e6e6"
+                        Image {
+                            source: "qrc:/new/prefix1/qrc/background.png"
+                        }
                     }
                 }
             }

@@ -12,5 +12,6 @@
         <file>qrc/look.png</file>
         <file>qrc/look1.png</file>
         <file>qrc/sad.png</file>
+        <file>qrc/background.png</file>
     </qresource>
 </RCC>

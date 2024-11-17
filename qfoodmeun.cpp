@@ -5,7 +5,12 @@
 QFoodMeun::QFoodMeun(QObject *parent)
     : QObject{parent}
 {
-
+    m_file.setFileName(QString("menu1.txt"));
+    if (!m_file.exists()) {
+        if (m_file.open(QFile::WriteOnly)) {
+            m_file.close();
+        }
+    }
 }
 
 QFoodMeun::~QFoodMeun()
@@ -19,11 +24,7 @@ void QFoodMeun::fillMenuMap(const QString &strMenu, const int &nScore)
     {
         m_mapMenuRate.insert(strMenu, nScore);
     }
-
-    static int i = 0;
-    i++;
-    if (i == 2)
-        saveMenuRate();
+    saveMenuRate();
 }
 
 void QFoodMeun::saveMenuRate()
@@ -31,11 +32,6 @@ void QFoodMeun::saveMenuRate()
     QTextStream out(&m_file);
     QMultiMap<QString, int>::const_iterator iter;
 
-    if (!m_file.exists()) {
-        if (m_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            m_file.close();
-        }
-    }
     if (!m_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "无法打开文件进行写入";
         return;
