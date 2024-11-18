@@ -26,12 +26,25 @@ void QFoodMeun::fillMenuMap(const QString &strMenu, const int &nScore)
 {
     QDateTime date = QDateTime::currentDateTime();
     TFoodMenu foodMenu;
+    QMultiMap<QString, TFoodMenu>::const_iterator iter;
+    bool bReplace = false;
 
     if (!strMenu.isEmpty() && !strMenu.contains("...") && (nScore >= 1) && (nScore <= 5))
     {
         foodMenu.strDay = date.toString("yyyy-MM-dd");
         foodMenu.nScore = nScore;
-        m_mapMenuRate.insert(strMenu, foodMenu);
+        for (iter = m_mapMenuRate.constBegin(); iter!= m_mapMenuRate.constEnd(); ++iter)
+        {
+            if (iter.key() == strMenu && iter.value().strDay == foodMenu.strDay)
+            {
+                // 仅更新
+                m_mapMenuRate.replace(iter.key(), foodMenu);
+                bReplace = true;
+            }
+        }
+        if (!bReplace) {
+            m_mapMenuRate.insert(strMenu, foodMenu);
+        }
     }
     saveMenuRate();
 }
@@ -62,6 +75,7 @@ void QFoodMeun::saveMenuRate()
         qDebug() << "无法打开文件进行写入";
         return;
     }
+
     for (iter = m_mapMenuRate.constBegin(); iter!= m_mapMenuRate.constEnd(); ++iter) {
         out <<  iter.key() << ": " << iter.value().strDay << ": " << iter.value().nScore << Qt::endl;
     }
