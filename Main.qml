@@ -4,7 +4,7 @@ import QtQuick.Controls 2.9
 
 pragma ComponentBehavior: Bound
 
-                          Window {
+Window {
     visible: true
     title: "Food Menu"
     color: "#fafafa"
@@ -14,8 +14,8 @@ pragma ComponentBehavior: Bound
     property real buttonWidth: Screen.pixelDensity > 1? 100 : 80
     property real buttonHeight: Screen.pixelDensity > 1? 45 : 40
     property real controlSpacing: Screen.pixelDensity > 1? 25 : 20
-    width: 1240
-    height: 2770
+    width: Screen.width  //1240 Screen.width
+    height:  Screen.height //2770 Screen.height
 
     // 背景渐变
     Rectangle {
@@ -40,9 +40,9 @@ pragma ComponentBehavior: Bound
         TextField
         {
             id : enter_menu
-            x : parent.x + parent.width / 6
+            x : parent.x + parent.width * 0.05
             y : parent.y + parent.height / 20
-            width : parent.width / 1.5
+            width : parent.width * 0.9
             height : parent.height / 15
             leftPadding: enter_image.width * 2
             font.pixelSize : 16
@@ -226,19 +226,29 @@ pragma ComponentBehavior: Bound
                 opacity: enabled ? 1 : 0.3
                 color : "#e6e6e6"
                 radius : btnShow.height / 2
-                Text {
-                    // verticalAlignment: Text.AlignVCenter
-                    // leftPadding : btnShow.height * 2
-                    font.pixelSize : 16
-                    anchors.centerIn: parent
-                    text : qsTr(" 评分清单")
-                }
-                Image {
-                    x : btnShow.height / 10
-                    y : btnShow.height / 20
-                    width : btnShow.height * 0.7
-                    height : width
-                    source: "qrc:/new/prefix1/qrc/look1.png"
+
+                Row {
+                    leftPadding : topPadding
+                    topPadding : height * 0.15
+                    height: parent.height
+                    width : parent.width
+                    Image {
+                        width : btnShow.height * 0.7
+                        height: width
+                        horizontalAlignment: Image.AlignLeft
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/new/prefix1/qrc/look1.png"
+                    }
+                    Text {
+                        x : btnShow.height
+                        width : parent.width - btnShowImage.width
+                        wrapMode: Text.WordWrap
+                        height : btnShow.height
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        font.pixelSize : 16
+                        text : qsTr("评分清单")
+                    }
                 }
             }
             onPressed : {
@@ -267,19 +277,27 @@ pragma ComponentBehavior: Bound
                 opacity: enabled ? 1 : 0.3
                 color : "#e6e6e6"
                 radius : btnShow.height / 2
-                Text {
-                    // verticalAlignment: Text.AlignVCenter
-                    // leftPadding : btnShow.height * 2
-                    font.pixelSize : 16
-                    anchors.centerIn: parent
-                    text : qsTr(" 菜单分析")
-                }
-                Image {
-                    x : btnShow.height / 10
-                    y : btnShow.height / 12
-                    width : btnShow.height
-                    height : width
-                    source: "qrc:/new/prefix1/qrc/look.png"
+
+                Row {
+                    leftPadding : 0
+                    height: parent.height
+                    width : parent.width
+                    Image {
+                        width : btnShow.height
+                        height : width
+                        horizontalAlignment: Image.AlignLeft
+                        source: "qrc:/new/prefix1/qrc/look.png"
+                    }
+                    Text {
+                        x : btnShow.height
+                        width : parent.width - btnShowImage.width
+                        wrapMode: Text.WordWrap
+                        height : btnShow.height
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        font.pixelSize : 16
+                        text : qsTr("菜单分析")
+                    }
                 }
             }
         }
