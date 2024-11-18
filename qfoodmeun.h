@@ -37,9 +37,9 @@ public:
 
     void getMenuRate();
 
-    QMap<QString, AverageData> calculateAverage(const QMultiMap<QString, int>& multiMap);
+    Q_INVOKABLE QMap<QString, AverageData> calculateAverage();
 
-    QStringList genResult(const QMap<QString, AverageData>& map);
+    Q_INVOKABLE QStringList genResult(const QMap<QString, AverageData> &map);
 
 private:
     QMultiMap <QString, TFoodMenu> m_mapMenuRate;

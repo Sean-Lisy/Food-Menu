@@ -7,6 +7,7 @@ QFoodMeun::QFoodMeun(QObject *parent)
 {
     m_file.setFileName(QString("menu.txt"));
     if (!m_file.exists()) {
+        qDebug() << "!exist";
         if (m_file.open(QFile::WriteOnly)) {
             m_file.close();
         }
@@ -90,9 +91,16 @@ void QFoodMeun::getMenuRate()
     m_file.close();
 }
 
-QMap<QString, AverageData> QFoodMeun::calculateAverage(const QMultiMap<QString, int> &multiMap)
+QMap<QString, AverageData> QFoodMeun::calculateAverage()
 {
     QMap<QString, AverageData> averageMap;
+    QMultiMap<QString, int> multiMap;
+    QMultiMap<QString, TFoodMenu>::const_iterator iter = m_mapMenuRate.constBegin();
+
+    while( iter != m_mapMenuRate.constEnd()) {
+        multiMap.insert(iter.key(), iter.value().nScore);
+        ++iter;
+    }
 
     // 遍历 QMultiMap 中的每个键
     QMultiMap<QString, int>::const_iterator it = multiMap.constBegin();
@@ -131,8 +139,8 @@ QStringList QFoodMeun::genResult(const QMap<QString, AverageData> &map)
         strKey = iter.key();
         nSum = iter.value().sumCount;
         dAverage = iter.value().average;
-        strResult = "菜品<b>\"" + strKey + "\"</b>共烹饪<b>\"" + QString::number(nSum) + "\"</b>次，平均得分为:<b>\"" +  QString::number(dAverage, 'f', 2) + \
-                    QString("\"</b>");
+        strResult = "菜品\"" + strKey + "\"共烹饪\"" + QString::number(nSum) + "\"次，平均得分为:\"" +  QString::number(dAverage, 'f', 2) + \
+                    QString("\"");
         strResultList.append(strResult);
     }
 

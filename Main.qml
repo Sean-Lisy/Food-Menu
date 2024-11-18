@@ -14,20 +14,14 @@ Window {
     property real buttonWidth: Screen.pixelDensity > 1? 100 : 80
     property real buttonHeight: Screen.pixelDensity > 1? 45 : 40
     property real controlSpacing: Screen.pixelDensity > 1? 25 : 20
-    width: Screen.width  //1240 Screen.width
-    height:  Screen.height //2770 Screen.height
+    width : Screen.width  //1240 Screen.width
+    height : Screen.height //2770 Screen.height
 
     // 根据平台选择分辨率
     Component.onCompleted : {
-        if (Qt.platform.os === "android") {
-            console.log("Running on Android.");
-            width = Screen.width;
-            height = Screen.height
-
-        } else if(Qt.platform.os === "windows") {
-            console.log("Running on Windows.");
-            width = 1240 / 2;
-            height = 2770 / 2
+         if(Qt.platform.os === "windows") {
+            width = 1240 / 2 ;
+            height = 2770 / 2 ;
         }
     }
 
@@ -202,23 +196,30 @@ Window {
             y : row_slider.y + row_slider.y / 3 * 3
             width : enter_menu.width
             height : parent.height / 2
-            // visible: true
+            visible: true
+            radius: enter_menu.height / 2
+            color : "#e6e6e6"
             ScrollView {
                 id : scrollViem
-                anchors.fill : parent;
+                anchors.fill : parent
                 TextArea {
                     id: textArea
+                    leftPadding : enter_menu.height / 4
+                    topPadding : leftPadding
+                    rightPadding : leftPadding
+                    bottomPadding: leftPadding
                     visible: true
                     font.pixelSize : 15
-                    // color : "yellow"
                     wrapMode: TextArea.Wrap
                     background : Rectangle {
                         color : "#e6e6e6"
-                        Image {
-                            width : parent.width
-                            height : parent.height
+                        anchors.fill : parent
+                        radius: enter_menu.height / 2
+                        // Image {
+                            // width : parent.width
+                            // height : parent.height
                             // source: "qrc:/new/prefix1/qrc/background.png"
-                        }
+                        // }
                     }
                 }
             }
@@ -243,12 +244,14 @@ Window {
 
                 Row {
                     leftPadding : topPadding
-                    topPadding : height * 0.15
                     height: parent.height
                     width : parent.width
                     Image {
+                        id : btnShowImage
                         width : btnShow.height * 0.7
                         height: width
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: btnShow.height * 0.15
                         horizontalAlignment: Image.AlignLeft
                         verticalAlignment: Image.AlignVCenter
                         source: "qrc:/new/prefix1/qrc/look1.png"
@@ -313,6 +316,19 @@ Window {
                         text : qsTr("菜单分析")
                     }
                 }
+            }
+            onPressed : {
+                var map;
+                var strList;
+
+                map = foodMenu.calculateAverage();
+                strList = foodMenu.genResult(map);
+                console.log(strList);
+                var combinedText = "";
+                        for (var i = 0; i < strList.length; i++) {
+                            combinedText += strList[i] + "\n";
+                        }
+                textArea.text = combinedText;
             }
         }
     }
