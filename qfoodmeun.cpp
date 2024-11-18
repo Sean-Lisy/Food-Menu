@@ -6,9 +6,7 @@ QFoodMeun::QFoodMeun(QObject *parent)
     : QObject{parent}
 {
     m_file.setFileName(QString("menu.txt"));
-    qDebug() << "???";
     if (!m_file.exists()) {
-        qDebug() << "!exist";
         if (m_file.open(QFile::WriteOnly)) {
             m_file.close();
         }

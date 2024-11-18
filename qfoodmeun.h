@@ -30,6 +30,7 @@ public:
     Q_INVOKABLE QString getHistoryMenu ();
 
     /**
+     *
      * @brief saveMenuRate 将数据保存到file中
      */
     void saveMenuRate();
