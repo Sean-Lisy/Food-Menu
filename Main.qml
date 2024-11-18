@@ -17,6 +17,20 @@ Window {
     width: Screen.width  //1240 Screen.width
     height:  Screen.height //2770 Screen.height
 
+    // 根据平台选择分辨率
+    Component.onCompleted : {
+        if (Qt.platform.os === "android") {
+            console.log("Running on Android.");
+            width = Screen.width;
+            height = Screen.height
+
+        } else if(Qt.platform.os === "windows") {
+            console.log("Running on Windows.");
+            width = 1240 / 2;
+            height = 2770 / 2
+        }
+    }
+
     // 背景渐变
     Rectangle {
         visible: true
